@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     # Project Configuration
     PROJECT_NAME: str = "Prueba Tecnica GPSCONTROL"
     VERSION: str = "1.0.0"
-    DEBUG: bool = False
+    DEBUG: bool = Field(default=False)
     
     # Database Configuration
     DATABASE_URL: str = Field(..., description="Database connection URL")
@@ -19,7 +19,14 @@ class Settings(BaseSettings):
     
     # API Configuration
     API_V1_STR: str = "/api/v1"
-    CORS_ORIGINS: list[str] = ["http://localhost:3000", "http://localhost:8000"]
+    CORS_ORIGINS: list[str] = Field(
+        default=["http://localhost:3000", "http://localhost:8000"],
+        description="Allowed CORS origins"
+    )
+    
+    # Server Configuration
+    HOST: str = Field(default="0.0.0.0", description="Server host")
+    PORT: int = Field(default=8000, ge=1, le=65535, description="Server port")
     
     # Environment
     ENVIRONMENT: str = Field(default="development", pattern="^(development|staging|production)$")
