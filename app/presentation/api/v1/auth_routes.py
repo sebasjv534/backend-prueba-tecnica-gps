@@ -6,6 +6,19 @@ from app.presentation.dependencies import get_user_service
 
 router = APIRouter()
 
+@router.get("/", response_model=dict)
+async def auth_info():
+    """Información sobre los endpoints de autenticación disponibles"""
+    return {
+        "message": "API de Autenticación - Prueba Técnica GPS Control",
+        "version": "1.0.0",
+        "endpoints": {
+            "register": "POST /api/v1/auth/register",
+            "login": "POST /api/v1/auth/login"
+        },
+        "documentation": "/docs"
+    }
+
 @router.post("/register", response_model=UserResponse)
 async def register(user_in: UserCreate, service: UserService = Depends(get_user_service)):
     try:

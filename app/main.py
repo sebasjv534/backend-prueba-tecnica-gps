@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.core.database import engine, Base
 from app.presentation.api.v1 import auth_routes, vehicle_routes
@@ -18,6 +19,21 @@ app = FastAPI(
     description="API backend prueba técnica GPSCONTROL",
     version="1.0.0",
     lifespan=lifespan,
+)
+
+# Configurar CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:3000",  # React development
+        "http://localhost:3001",  # Backup local port
+        "https://localhost:3000", # HTTPS local
+        "https://tu-frontend-domain.com",  # Dominio de producción del frontend
+        "*"  # Permitir todos los orígenes (solo para desarrollo - remover en producción)
+    ],
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["*"],
 )
 
 app.include_router(auth_routes.router, prefix="/api/v1/auth", tags=["auth"])
