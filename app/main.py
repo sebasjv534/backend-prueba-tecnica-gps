@@ -23,9 +23,26 @@ app = FastAPI(
 app.include_router(auth_routes.router, prefix="/api/v1/auth", tags=["auth"])
 app.include_router(vehicle_routes.router, prefix="/api/v1/vehicles", tags=["vehicles"])
 
+@app.get("/", tags=["root"])
+async def root():
+    """Endpoint raíz de la API"""
+    return {
+        "message": "Prueba Técnica GPSCONTROL API",
+        "version": "1.0.0",
+        "status": "running",
+        "docs": "/docs",
+        "redoc": "/redoc",
+        "health": "/health"
+    }
+
 @app.get("/health", tags=["health"])
 async def health_check():
-    return {"status": "ok"}
+    """Endpoint de verificación de salud"""
+    return {
+        "status": "ok",
+        "version": "1.0.0",
+        "database": "connected"
+    }
 
 # --- Global Exception Handlers ---
 @app.exception_handler(NotFoundError)
